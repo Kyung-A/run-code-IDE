@@ -1,11 +1,20 @@
 import express, { Application, Request, Response } from "express";
 import ivm from "isolated-vm";
+import fs from "fs";
 
 const router = express.Router();
 
+const test = fs
+  .readFileSync("./src/mock/example.txt")
+  .toString()
+  .trim()
+  .split("\n");
+const input = test[0].split(" ").map(Number);
+const output = Number(test[1]);
+
 router.post("/", async (req: Request, res: Response) => {
   try {
-    // const { code: testCode, lang } = req.body;
+    const { code } = req.body;
     const isolate = new ivm.Isolate({ memoryLimit: 124 });
     const context = isolate.createContextSync();
 
@@ -13,7 +22,7 @@ router.post("/", async (req: Request, res: Response) => {
     jail.setSync("global", jail.derefInto());
 
     const consoleCallback = function (...args: any) {
-      console.log(...args);
+      console.log("1111", ...args);
     };
 
     context.evalClosureSync(
@@ -24,23 +33,14 @@ router.post("/", async (req: Request, res: Response) => {
       { arguments: { reference: true } }
     );
 
-    const solutionCallback = function (...args: any) {
-      return "abc";
-    };
-
-    context.evalClosureSync(
-      `global.test = function(...args) {
-            return $0.applySync(undefined, args, { arguments: { copy: true }, result: { promise: true } });
-        }`,
-      [solutionCallback],
-      { arguments: { reference: true } }
-    );
-
     const script = isolate.compileScriptSync(`
         (async() => {
             try {
-                return await test();
-            }catch (err) {
+              ${code}
+              const result = solution(${input[0]}, ${input[1]});
+              console.log(result)
+              return result === ${output} ? "성공" : "실패";
+            } catch (err) {
                 console.error(err)
             }
         })();
