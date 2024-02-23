@@ -1,4 +1,5 @@
 import express, { Application, Request, Response } from "express";
+import { problemList } from "../mock/problem";
 import ivm from "isolated-vm";
 import fs from "fs";
 
@@ -12,7 +13,15 @@ const test = fs
 const input = test[0].split(" ").map(Number);
 const output = Number(test[1]);
 
-router.post("/", async (req: Request, res: Response) => {
+router.get("/", (_, res: Response) => {
+  try {
+    res.status(200).send(problemList);
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+router.post("/:problemId", async (req: Request, res: Response) => {
   try {
     const { code } = req.body;
     const isolate = new ivm.Isolate({ memoryLimit: 124 });
