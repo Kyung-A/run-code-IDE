@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/problem", problem);
+app.use("/api/problem", problem);
 
 app.listen(port, function () {
   console.log(`App is listening on port ${port} !`);
