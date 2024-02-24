@@ -52,13 +52,18 @@ router.post("/:problemId", async (req: Request, res: Response) => {
       while (i < problem.testcase.length) {
         const input = problem.testcase[i].input;
         const output = problem.testcase[i].output.result;
+        let param = [];
+        for (let j = 0; j < input.length; j++) {
+          param.push(input[j]);
+          param.push(",");
+        }
 
         const script = isolate.compileScriptSync(`
           (async() => {
               try {
                 ${code}
                 let flag = true;
-                const result = solution(${input[0]}, ${input[1]});
+                const result = solution(${param.join("").slice(0, -1)});
                 if(result === ${output}) {
                   flag = true;
                 } else if(!result) {
