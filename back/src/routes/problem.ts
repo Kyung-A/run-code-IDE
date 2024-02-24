@@ -1,5 +1,5 @@
-import express, { Application, Request, Response } from "express";
-import { problemList, problem } from "../mock/problem";
+import express, { Request, Response } from "express";
+import { problemList, problem, problemTestcase } from "../mock/problem";
 import ivm from "isolated-vm";
 
 const router = express.Router();
@@ -22,9 +22,11 @@ router.get("/:problemId", (req: Request, res: Response) => {
   }
 });
 
-// TODO: 목업데이터에 맞게 결괏값 반환하기
 router.post("/:problemId", async (req: Request, res: Response) => {
   try {
+    const id = req.params.problemId;
+    const problem = problemTestcase.find((v) => v.id === id);
+
     const { code } = req.body;
     const isolate = new ivm.Isolate({ memoryLimit: 124 });
     const context = isolate.createContextSync();
@@ -33,7 +35,7 @@ router.post("/:problemId", async (req: Request, res: Response) => {
     jail.setSync("global", jail.derefInto());
 
     const consoleCallback = function (...args: any) {
-      console.log("1111", ...args);
+      console.log(...args);
     };
 
     context.evalClosureSync(
@@ -44,23 +46,47 @@ router.post("/:problemId", async (req: Request, res: Response) => {
       { arguments: { reference: true } }
     );
 
-    const script = isolate.compileScriptSync(`
-        (async() => {
-            try {
-              ${code}
-              const result = solution($input[0], input[1]);
-              console.log(result)
-              return result === output ? "성공" : "실패";
-            } catch (err) {
-                console.error(err)
-            }
-        })();
-    `);
+    let flag = true;
+    if (problem) {
+      let i = 0;
+      while (i < problem.testcase.length) {
+        const input = problem.testcase[i].input;
+        const output = problem.testcase[i].output.result;
 
-    const result = await script.runSync(context, { promise: true });
-    console.log(result);
+        const script = isolate.compileScriptSync(`
+          (async() => {
+              try {
+                ${code}
+                let flag = true;
+                const result = solution(${input[0]}, ${input[1]});
+                if(result === ${output}) {
+                  flag = true;
+                } else if(!result) {
+                  flag = false;
+                } else {
+                  flag = false;
+                }
+                return flag;
+              } catch (err) {
+                  console.error(err)
+              }
+          })();
+        `);
+        const result = await script
+          .runSync(context, { promise: true })
+          .catch((e) => console.error(e));
 
-    res.status(200).send(`${result}`);
+        if (!result) {
+          flag = false;
+          break;
+        } else {
+          flag = true;
+        }
+        i++;
+      }
+    }
+
+    res.status(200).send(`${flag ? "성공했습니다!" : "실패했습니다."}`);
   } catch (e) {
     console.error(e);
   }

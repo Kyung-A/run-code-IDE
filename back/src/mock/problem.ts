@@ -46,7 +46,7 @@ export const problemTestcase = [
         input: [100, 12],
         output: {
           type: "number",
-          result: 123,
+          result: 112,
         },
       },
       {

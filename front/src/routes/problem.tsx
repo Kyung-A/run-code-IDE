@@ -10,7 +10,6 @@ import { IProblem } from "../types";
 const defaultCode = (param: string) => {
   return `function solution (${param}) {
   let result = 0;
-  result = n + m;
   return result;
 }`;
 };
