@@ -14,6 +14,19 @@ export const problem = [
     id: "1",
     question:
       "두 정수 A와 B를 입력받은 다음, A+B를 출력하는 프로그램을 작성하시오.",
+    param: 2,
+  },
+  {
+    id: "2",
+    question:
+      "두 정수 A와 B를 입력받은 다음, A-B를 출력하는 프로그램을 작성하시오.",
+    param: 2,
+  },
+];
+
+export const problemTestcase = [
+  {
+    id: "1",
     testcase: [
       {
         input: [3, 6],
@@ -47,8 +60,6 @@ export const problem = [
   },
   {
     id: "2",
-    question:
-      "두 정수 A와 B를 입력받은 다음, A-B를 출력하는 프로그램을 작성하시오.",
     testcase: [
       {
         input: [-3, 6],

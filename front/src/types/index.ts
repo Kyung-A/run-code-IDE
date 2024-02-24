@@ -3,8 +3,14 @@ export interface IProblemList {
   title: string;
 }
 
-export interface IRequestProblem {
+export interface IProblemInput {
   id: string | undefined;
   code: string;
   lang: string;
+}
+
+export interface IProblem {
+  id: string | undefined;
+  question: string;
+  param: number;
 }

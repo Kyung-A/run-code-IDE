@@ -1,17 +1,8 @@
 import express, { Application, Request, Response } from "express";
-import { problemList } from "../mock/problem";
+import { problemList, problem } from "../mock/problem";
 import ivm from "isolated-vm";
-import fs from "fs";
 
 const router = express.Router();
-
-const test = fs
-  .readFileSync("./src/mock/example.txt")
-  .toString()
-  .trim()
-  .split("\n");
-const input = test[0].split(" ").map(Number);
-const output = Number(test[1]);
 
 router.get("/", (_, res: Response) => {
   try {
@@ -21,6 +12,17 @@ router.get("/", (_, res: Response) => {
   }
 });
 
+router.get("/:problemId", (req: Request, res: Response) => {
+  try {
+    const id = req.params.problemId;
+    const data = problem.find((v) => v.id === id);
+    res.status(200).send(data);
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+// TODO: 목업데이터에 맞게 결괏값 반환하기
 router.post("/:problemId", async (req: Request, res: Response) => {
   try {
     const { code } = req.body;
@@ -46,9 +48,9 @@ router.post("/:problemId", async (req: Request, res: Response) => {
         (async() => {
             try {
               ${code}
-              const result = solution(${input[0]}, ${input[1]});
+              const result = solution($input[0], input[1]);
               console.log(result)
-              return result === ${output} ? "성공" : "실패";
+              return result === output ? "성공" : "실패";
             } catch (err) {
                 console.error(err)
             }

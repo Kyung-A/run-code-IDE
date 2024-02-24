@@ -1,31 +1,55 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { material } from "@uiw/codemirror-theme-material";
-import { requestProblem } from "../apis/problemApi";
 
-const defaultCode = `function solution (n, m) {
+import { requestProblem, requestProblemOutput } from "../apis/problemApi";
+import { IProblem } from "../types";
+
+const defaultCode = (param: string) => {
+  return `function solution (${param}) {
   let result = 0;
   result = n + m;
   return result;
 }`;
+};
 
 const Problem = () => {
   const { problemId } = useParams();
 
-  const [code, setCode] = useState<string>(defaultCode);
+  const [problem, setProblem] = useState<IProblem>();
+  const [code, setCode] = useState<string>("");
   const [lang, setLang] = useState<string>("");
   const [result, setResult] = useState<string>("");
 
   const onSubmit = useCallback(() => {
-    requestProblem({ id: problemId, code, lang }).then((rep) =>
+    requestProblemOutput({ id: problemId, code, lang }).then((rep) =>
       setResult(rep.data)
     );
   }, [code, lang, problemId]);
 
+  useEffect(() => {
+    if (problemId) {
+      requestProblem(problemId).then((rep) => setProblem(rep.data));
+    }
+  }, [problemId]);
+
+  useEffect(() => {
+    if (problem) {
+      const param = Array.from(
+        { length: problem.param },
+        (_, i) => `param${i + 1}`
+      ).join(", ");
+      const code = defaultCode(param);
+      setCode(code);
+    }
+  }, [problem]);
+
   return (
     <div>
+      <h2>문제</h2>
+      <p>{problem?.question}</p>
       <h2>Input</h2>
       <CodeMirror
         value={code}
