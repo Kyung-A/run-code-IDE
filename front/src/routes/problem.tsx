@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { material } from "@uiw/codemirror-theme-material";
+import io from "socket.io-client";
 
 import { requestProblem, requestProblemOutput } from "../apis/problemApi";
 import { IProblem } from "../types";
@@ -16,6 +17,13 @@ const defaultCode = (param: string) => {
 
 const Problem = () => {
   const { problemId } = useParams();
+
+  const socket = io("http://localhost:3001/problem", {
+    reconnectionDelayMax: 10000,
+    query: {
+      problem: problemId,
+    },
+  });
 
   const [problem, setProblem] = useState<IProblem>();
   const [code, setCode] = useState<string>("");
@@ -68,7 +76,9 @@ const Problem = () => {
           <option>C++</option>
         </select>
         <button
-          onClick={onSubmit}
+          // onClick={onSubmit}
+          type="button"
+          onClick={() => socket.emit("join", { room: problemId })}
           style={{ width: "100px", height: "30px", marginLeft: "8px" }}
         >
           제출하기
