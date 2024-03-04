@@ -5,8 +5,8 @@ import { javascript } from "@codemirror/lang-javascript";
 import { material } from "@uiw/codemirror-theme-material";
 import io from "socket.io-client";
 
-import { requestProblem, requestProblemOutput } from "../apis/problemApi";
-import { IProblem } from "../types";
+import { requestProblem } from "../apis/problemApi";
+import { IOutput, IProblem } from "../types";
 
 const defaultCode = (param: string) => {
   return `function solution (${param}) {
@@ -28,13 +28,14 @@ const Problem = () => {
   const [problem, setProblem] = useState<IProblem>();
   const [code, setCode] = useState<string>("");
   const [lang, setLang] = useState<string>("");
-  const [result, setResult] = useState<string>("");
+  const [result, setResult] = useState<IOutput>();
+  const [error, setError] = useState<string>("");
 
   const onSubmit = useCallback(() => {
-    requestProblemOutput({ id: problemId, code, lang }).then((rep) =>
-      setResult(rep.data)
-    );
-  }, [code, lang, problemId]);
+    setResult({});
+    setError("");
+    socket.emit("join", { room: problemId, id: problemId, code, lang });
+  }, [code, lang, problemId, socket]);
 
   useEffect(() => {
     if (problemId) {
@@ -52,6 +53,15 @@ const Problem = () => {
       setCode(code);
     }
   }, [problem]);
+
+  useEffect(() => {
+    socket.on("test", (data) => {
+      setResult(data);
+    });
+    socket.on("error", (data) => {
+      setError(data);
+    });
+  }, [socket]);
 
   return (
     <div>
@@ -76,9 +86,8 @@ const Problem = () => {
           <option>C++</option>
         </select>
         <button
-          // onClick={onSubmit}
           type="button"
-          onClick={() => socket.emit("join", { room: problemId })}
+          onClick={onSubmit}
           style={{ width: "100px", height: "30px", marginLeft: "8px" }}
         >
           제출하기
@@ -95,7 +104,25 @@ const Problem = () => {
           backgroundColor: "#2e3235",
         }}
       >
-        <pre style={{ margin: "0px", color: "#fff" }}>{result}</pre>
+        {error !== "" ? (
+          <p style={{ margin: "0px", color: "#c92c2c" }}>{error}</p>
+        ) : (
+          <ul
+            style={{
+              margin: "0px",
+              padding: "0px",
+              listStyle: "none",
+              color: "#fff",
+            }}
+          >
+            {result?.testcase?.map((v, i) => (
+              <li key={i}>
+                테스트케이스 {i} : {v === "false" ? "실패" : "성공"}
+              </li>
+            ))}
+            {result?.result && <p>{result?.result}</p>}
+          </ul>
+        )}
       </div>
     </div>
   );

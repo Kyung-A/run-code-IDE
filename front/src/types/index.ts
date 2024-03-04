@@ -14,3 +14,8 @@ export interface IProblem {
   question: string;
   param: number;
 }
+
+export interface IOutput {
+  testcase?: string[];
+  result?: boolean;
+}
