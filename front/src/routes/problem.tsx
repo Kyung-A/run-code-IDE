@@ -1,19 +1,13 @@
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import CodeMirror from "@uiw/react-codemirror";
-import { javascript } from "@codemirror/lang-javascript";
 import { material } from "@uiw/codemirror-theme-material";
 import io from "socket.io-client";
+import { LanguageName, loadLanguage } from "@uiw/codemirror-extensions-langs";
 
 import { requestProblem } from "../apis/problemApi";
 import { IOutput, IProblem } from "../types";
-
-const defaultCode = (param: string) => {
-  return `function solution (${param}) {
-  let result = 0;
-  return result;
-}`;
-};
+import { defaultCode } from "../utils/consts";
 
 const Problem = () => {
   const { problemId } = useParams();
@@ -27,7 +21,7 @@ const Problem = () => {
 
   const [problem, setProblem] = useState<IProblem>();
   const [code, setCode] = useState<string>("");
-  const [lang, setLang] = useState<string>("");
+  const [lang, setLang] = useState<LanguageName>("javascript");
   const [result, setResult] = useState<IOutput>();
   const [error, setError] = useState<string>("");
 
@@ -44,15 +38,15 @@ const Problem = () => {
   }, [problemId]);
 
   useEffect(() => {
-    if (problem) {
-      const param = Array.from(
-        { length: problem.param },
-        (_, i) => `param${i + 1}`
-      ).join(", ");
-      const code = defaultCode(param);
-      setCode(code);
+    switch (lang) {
+      case "javascript":
+        setCode(defaultCode.javscript);
+        break;
+      case "python":
+        setCode(defaultCode.python);
+        break;
     }
-  }, [problem]);
+  }, [lang]);
 
   useEffect(() => {
     socket.on("test", (data) => {
@@ -71,19 +65,20 @@ const Problem = () => {
       <CodeMirror
         value={code}
         onChange={(e) => setCode(e)}
-        extensions={[javascript({ jsx: true })]}
         theme={material}
         height="200px"
+        extensions={[loadLanguage(`${lang}`)!]}
       />
       <div style={{ marginTop: "10px" }}>
         <select
-          onChange={(e) => setLang(e.target.value)}
+          onChange={(e) => setLang(e.target.value as LanguageName)}
+          defaultValue="Javascript"
           style={{ width: "100px", height: "30px" }}
         >
-          <option>Javascript</option>
-          <option>Python</option>
-          <option>Java</option>
-          <option>C++</option>
+          <option>javascript</option>
+          <option>python</option>
+          <option>java</option>
+          <option>cpp</option>
         </select>
         <button
           type="button"
