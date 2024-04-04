@@ -4,7 +4,7 @@ import http from "http";
 import { Server } from "socket.io";
 
 import problem from "./routes/problem";
-import { problemSocket } from "./routes/problemSocket";
+import { problemSocket } from "./sockets/problemSocket";
 
 const app: Application = express();
 const server = http.createServer(app);

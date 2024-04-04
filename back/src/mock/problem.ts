@@ -29,32 +29,20 @@ export const problemTestcase = [
     id: "1",
     testcase: [
       {
-        input: [3, 6],
-        output: {
-          type: "number",
-          result: 9,
-        },
+        input: "3 6",
+        output: 9,
       },
       {
-        input: [2, 1],
-        output: {
-          type: "number",
-          result: 3,
-        },
+        input: "2 1",
+        output: 3,
       },
       {
-        input: [100, 12],
-        output: {
-          type: "number",
-          result: 112,
-        },
+        input: "100 12",
+        output: 112,
       },
       {
-        input: [923854, 2345],
-        output: {
-          type: "number",
-          result: 926199,
-        },
+        input: "923854 2345",
+        output: 926199,
       },
     ],
   },
