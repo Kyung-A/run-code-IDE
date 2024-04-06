@@ -1,4 +1,11 @@
 export const defaultCode = {
-  python: `import sys\n arg = sys.argv[1:]`,
+  python: `a = int(input())`,
   javscript: `const input = require("fs").readFileSync("/dist/input.txt").toString().trim();`,
+  java: `import java.util.Scanner;
+
+  public class Main {
+    public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+  }
+}`,
 };

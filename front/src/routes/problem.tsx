@@ -45,6 +45,9 @@ const Problem = () => {
       case "python":
         setCode(defaultCode.python);
         break;
+      case "java":
+        setCode(defaultCode.java);
+        break;
     }
   }, [lang]);
 
@@ -102,21 +105,34 @@ const Problem = () => {
         {error !== "" ? (
           <p style={{ margin: "0px", color: "#c92c2c" }}>{error}</p>
         ) : (
-          <ul
-            style={{
-              margin: "0px",
-              padding: "0px",
-              listStyle: "none",
-              color: "#fff",
-            }}
-          >
-            {result?.testcase?.map((v, i) => (
-              <li key={i}>
-                테스트케이스 {i} : {v === "false" ? "실패" : "성공"}
-              </li>
-            ))}
-            {result?.result && <p>{result?.result}</p>}
-          </ul>
+          result && (
+            <ul
+              style={{
+                margin: "0px",
+                padding: "0px",
+                listStyle: "none",
+                color: "#fff",
+              }}
+            >
+              {Object.entries(result).map(([key, value]) => (
+                <li key={key}>
+                  테스트케이스 {Number(key) + 1} :{" "}
+                  <span
+                    style={{
+                      color: value === false ? "red" : "blue",
+                    }}
+                  >
+                    {value === false ? "실패" : "통과"}
+                  </span>
+                </li>
+              ))}
+              {/* {Object.values(result).some((v) => !v) ? (
+                <p style={{ color: "red" }}>테스트에 실패했습니다.</p>
+              ) : (
+                <p style={{ color: "blue" }}>테스트에 성공했습니다.</p>
+              )} */}
+            </ul>
+          )
         )}
       </div>
     </div>

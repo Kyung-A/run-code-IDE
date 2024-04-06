@@ -15,15 +15,16 @@ export const problemSocket = (io: any) => {
       const { id, code, lang } = data;
       const testcase = problemTestcase.find((v) => v.id === id);
       let clientResult: { [key: string]: boolean | null } = {};
+      const filePath = "dist";
 
       switch (lang) {
         case "javascript":
-          fs.writeFileSync("code.js", code);
+          fs.writeFileSync(`${filePath}/code.js`, code);
 
           testcase?.testcase.forEach((test, i) => {
             clientResult[i] = null;
             const input = test.input;
-            fs.writeFileSync("input.txt", input as string);
+            fs.writeFileSync(`${filePath}/input.txt`, input as string);
             const command = `docker run --rm -v %cd%:/dist node:latest node /dist/code.js /dist/input.txt`;
 
             try {
@@ -46,37 +47,100 @@ export const problemSocket = (io: any) => {
             }
           });
           break;
+
         case "python":
-          fs.writeFileSync("code.py", code);
+          fs.writeFileSync(`${filePath}/code.py`, code);
+
+          try {
+            execSync(
+              "docker build -t python:3 -f src/docker/python/Dockerfile ."
+            );
+          } catch (error) {
+            console.error(
+              `Error occurred while building Docker image: ${
+                (error as any).message
+              }`
+            );
+            process.exit(1);
+          }
+
           testcase?.testcase.forEach((test, i) => {
             clientResult[i] = null;
-            const input = test.input;
-            const command = `docker run --rm -v %cd%:/dist python:3 python /dist/code.py ${input}`;
+            exec(
+              `echo ${test.input} | docker run --rm -i python:3`,
+              (error, stdout, stderr) => {
+                if (error) {
+                  console.error(`Error: ${error.message}`);
+                  socket.emit("error", error.message);
+                  return;
+                }
+                if (stderr) {
+                  console.error(`Error: ${stderr}`);
+                  socket.emit("error", stderr);
+                  return;
+                }
 
-            exec(command, (error, stdout, stderr) => {
-              if (error) {
-                console.error(`Error: ${error.message}`);
-                socket.emit("error", error.message);
-                return;
-              }
-              if (stderr) {
-                console.error(`Error: ${stderr}`);
-                socket.emit("error", stderr);
-                return;
-              }
+                const result = JSON.parse(stdout);
+                console.log(stdout);
 
-              const result = JSON.parse(stdout);
-
-              if (result === test.output) {
-                clientResult[i] = true;
-                socket.emit("test", clientResult);
-              } else {
-                clientResult[i] = false;
-                socket.emit("test", clientResult);
+                if (result === test.output) {
+                  clientResult[i] = true;
+                  socket.emit("test", clientResult);
+                } else {
+                  clientResult[i] = false;
+                  socket.emit("test", clientResult);
+                }
               }
-            });
+            );
           });
           break;
+
+        case "java":
+          fs.writeFileSync(`${filePath}/Main.java`, code);
+
+          try {
+            execSync(
+              "docker build -t openjdk:11 -f src/docker/java/Dockerfile ."
+            );
+          } catch (error) {
+            console.error(
+              `Error occurred while building Docker image: ${
+                (error as any).message
+              }`
+            );
+            process.exit(1);
+          }
+
+          testcase?.testcase.forEach((test, i) => {
+            clientResult[i] = null;
+            exec(
+              `echo ${test.input} | docker run --rm -i openjdk:11`,
+              (error, stdout, stderr) => {
+                if (error) {
+                  console.error(`Error: ${error.message}`);
+                  socket.emit("error", error.message);
+                  return;
+                }
+                if (stderr) {
+                  console.error(`Error: ${stderr}`);
+                  socket.emit("error", stderr);
+                  return;
+                }
+
+                const result = JSON.parse(stdout);
+
+                if (result === test.output) {
+                  clientResult[i] = true;
+                  socket.emit("test", clientResult);
+                } else {
+                  clientResult[i] = false;
+                  socket.emit("test", clientResult);
+                }
+              }
+            );
+          });
+          break;
+
         default:
           return;
       }
