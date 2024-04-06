@@ -38,6 +38,7 @@ const Problem = () => {
   }, [problemId]);
 
   useEffect(() => {
+    setResult({});
     switch (lang) {
       case "javascript":
         setCode(defaultCode.javscript);
@@ -47,6 +48,11 @@ const Problem = () => {
         break;
       case "java":
         setCode(defaultCode.java);
+        break;
+      case "cpp":
+        setCode(defaultCode.cpp);
+        break;
+      default:
         break;
     }
   }, [lang]);
@@ -102,11 +108,12 @@ const Problem = () => {
           backgroundColor: "#2e3235",
         }}
       >
-        {error !== "" ? (
+        {error !== "" && (
           <p style={{ margin: "0px", color: "#c92c2c" }}>{error}</p>
-        ) : (
-          result && (
-            <ul
+        )}
+        {result && (
+          <>
+            <div
               style={{
                 margin: "0px",
                 padding: "0px",
@@ -126,13 +133,8 @@ const Problem = () => {
                   </span>
                 </li>
               ))}
-              {/* {Object.values(result).some((v) => !v) ? (
-                <p style={{ color: "red" }}>테스트에 실패했습니다.</p>
-              ) : (
-                <p style={{ color: "blue" }}>테스트에 성공했습니다.</p>
-              )} */}
-            </ul>
-          )
+            </div>
+          </>
         )}
       </div>
     </div>

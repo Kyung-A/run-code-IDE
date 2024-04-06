@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM  openjdk:11-alpine 
 # 소스 코드를 복사합니다.
 COPY dist/Main.java  /usr/src/
 # 작업 디렉토리를 설정합니다.

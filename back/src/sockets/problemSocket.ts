@@ -25,7 +25,7 @@ export const problemSocket = (io: any) => {
             clientResult[i] = null;
             const input = test.input;
             fs.writeFileSync(`${filePath}/input.txt`, input as string);
-            const command = `docker run --rm -v %cd%:/dist node:latest node /dist/code.js /dist/input.txt`;
+            const command = `docker run --rm -v %cd%:/dist node:16-alpine node /dist/code.js /dist/input.txt`;
 
             try {
               const result = execSync(command);
@@ -81,7 +81,6 @@ export const problemSocket = (io: any) => {
                 }
 
                 const result = JSON.parse(stdout);
-                console.log(stdout);
 
                 if (result === test.output) {
                   clientResult[i] = true;
@@ -115,6 +114,52 @@ export const problemSocket = (io: any) => {
             clientResult[i] = null;
             exec(
               `echo ${test.input} | docker run --rm -i openjdk:11`,
+              (error, stdout, stderr) => {
+                if (error) {
+                  console.error(`Error: ${error.message}`);
+                  socket.emit("error", error.message);
+                  return;
+                }
+                if (stderr) {
+                  console.error(`Error: ${stderr}`);
+                  socket.emit("error", stderr);
+                  return;
+                }
+
+                const result = JSON.parse(stdout);
+
+                if (result === test.output) {
+                  clientResult[i] = true;
+                  socket.emit("test", clientResult);
+                } else {
+                  clientResult[i] = false;
+                  socket.emit("test", clientResult);
+                }
+              }
+            );
+          });
+          break;
+
+        case "cpp":
+          fs.writeFileSync(`${filePath}/main.cpp`, code);
+
+          try {
+            execSync(
+              "docker build -t cpp:latest -f src/docker/cpp/Dockerfile ."
+            );
+          } catch (error) {
+            console.error(
+              `Error occurred while building Docker image: ${
+                (error as any).message
+              }`
+            );
+            process.exit(1);
+          }
+
+          testcase?.testcase.forEach((test, i) => {
+            clientResult[i] = null;
+            exec(
+              `echo ${test.input} | docker run --rm -i cpp:latest`,
               (error, stdout, stderr) => {
                 if (error) {
                   console.error(`Error: ${error.message}`);
