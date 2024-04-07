@@ -12,14 +12,19 @@ const ProblemList = () => {
   }, []);
 
   return (
-    <div>
-      <ul>
-        {data?.map((v) => (
-          <li key={v.id}>
-            <Link to={`/problemList/${v.id}`}>{v.title}</Link>
-          </li>
-        ))}
-      </ul>
+    <div className="problem-list-wrapper">
+      <div className="wapper-inner">
+        <h1>문제 목록</h1>
+        <div className="problem-list">
+          <ul>
+            {data?.map((v) => (
+              <li key={v.id}>
+                <Link to={`/problemList/${v.id}`}>{v.title}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };

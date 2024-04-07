@@ -56,6 +56,61 @@ table {
 	border-spacing: 0;
 }
 
+::-webkit-scrollbar-track {
+	background-color: #f8f8f8;
+}
+
+::-webkit-scrollbar {
+	width: 10px;
+	background-color: #f8f8f8;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #d4d4d4;
+}
+
+.problem-list-wrapper{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #eeeeee;
+    & .wapper-inner {
+        width: 360px;
+        max-height: 400px;
+        display: flex;
+        flex-direction: column;
+        & h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        & .problem-list {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 6px;
+            box-sizing: border-box;
+            background-color: #fff;
+            box-shadow: 0px 3px 14px 0px #7070702e;
+            & ul {
+                padding:0px 20px;
+                height: 100%;
+                overflow-y: auto;
+                & a {
+                    color: #000;
+                    width: 100%;
+                    display: block;
+                    padding: 15px 0px;
+                    border-bottom: 1px solid #eeeeee;
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}
+
 .wrapper {
     width: 100vw;
     height: 100vh;
