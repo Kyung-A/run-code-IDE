@@ -1,0 +1,195 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+@import url("https://font.elice.io/css?family=Elice+Digital+Coding");
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+html, body {
+    font-family: 'Pretendard-Regular';
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    background-color: #232a2f;
+}
+
+.problem {
+    width: 40%;
+    height: 100%;
+    color: #fff;
+    & .title {
+        width: 100%;
+        height: 50px;
+        border-bottom: 1px solid #414547;
+        display: flex;
+        align-items: center;
+        padding: 0px 20px;
+        box-sizing: border-box;
+        & a {
+            color: #8b8b8b;
+            text-decoration: none;
+            &:hover {
+                color:#fff
+            }
+        }
+        & svg {
+            width: 16px;
+            margin: 0px 5px;
+            color: #8b8b8b;
+        }
+        & h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+    }
+    & .question {
+        width: 100%;
+        padding: 30px 20px;
+        box-sizing: border-box;
+        & h2 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        & p {
+            margin: 20px 0px;
+            font-weight: 400;
+        }
+        & .example {
+            margin-top: 80px;
+            & table {
+                min-width: 30%;
+                margin-top: 20px;
+                border: 1px solid #414547;
+                background-color: #182025;
+                & th, & td {
+                    text-align: left;
+                    padding: 10px;
+                    border: 1px solid #414547;
+                }
+            }
+        }
+    }
+}
+
+.code-wrapper {
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.codeMirror-wrapper {
+    width: 100%;
+    flex: 2;
+    border-left: 1px solid #414547;
+    overflow-y: auto;
+    & .cm-editor * {
+        font-family: 'Elice Digital Coding', 'monospace';
+        font-size: 14px;
+    }
+}
+
+.select-lang {
+    width: 100%;
+    height: 50px;
+    border-bottom: 1px solid #414547;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    padding: 0px 20px;
+    box-sizing: border-box;
+    & select {
+        cursor: pointer;
+        font-size: 15px;
+        background-color: #474b4d;
+        border-radius: 6px;
+        color:#fff;
+        border: 0;
+        font-family: 'Pretendard-Regular';
+        padding: 8px 15px;
+        outline: none;
+    }
+}
+
+.output {
+    border: 1px solid #414547;
+    width: 100%;
+    flex: 1;
+    padding: 20px 20px;
+    box-sizing: border-box;
+    background-color: #182025;
+}
+
+.submit {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding: 0px 20px;
+    box-sizing: border-box;
+    border-left: 1px solid #414547;
+   & button {
+        margin-left: 10px;
+        cursor: pointer;
+        font-size: 15px;
+        background-color: #474b4d;
+        border-radius: 6px;
+        color:#fff;
+        border: 0;
+        font-family: 'Pretendard-Regular';
+        padding: 8px 30px;
+        outline: none;
+   }
+}

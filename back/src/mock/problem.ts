@@ -12,15 +12,35 @@ export const problemList = [
 export const problem = [
   {
     id: "1",
+    title: "더하기",
     question:
       "두 정수 A와 B를 입력받은 다음, A+B를 출력하는 프로그램을 작성하시오.",
-    param: 2,
+    example: [
+      {
+        input: "3 6",
+        output: 9,
+      },
+      {
+        input: "16 8",
+        output: 24,
+      },
+    ],
   },
   {
     id: "2",
+    title: "빼기",
     question:
       "두 정수 A와 B를 입력받은 다음, A-B를 출력하는 프로그램을 작성하시오.",
-    param: 2,
+    example: [
+      {
+        input: "3 6",
+        output: -3,
+      },
+      {
+        input: "16 8",
+        output: 8,
+      },
+    ],
   },
 ];
 

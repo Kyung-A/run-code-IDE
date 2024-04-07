@@ -1,13 +1,14 @@
 import { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import CodeMirror from "@uiw/react-codemirror";
-import { material } from "@uiw/codemirror-theme-material";
+import { copilot } from "@uiw/codemirror-theme-copilot";
 import io from "socket.io-client";
 import { LanguageName, loadLanguage } from "@uiw/codemirror-extensions-langs";
 
 import { requestProblem } from "../apis/problemApi";
 import { IOutput, IProblem } from "../types";
 import { defaultCode } from "../utils/consts";
+import { Link } from "react-router-dom";
 
 const Problem = () => {
   const { problemId } = useParams();
@@ -67,75 +68,105 @@ const Problem = () => {
   }, [socket]);
 
   return (
-    <div>
-      <h2>문제</h2>
-      <p>{problem?.question}</p>
-      <h2>Input</h2>
-      <CodeMirror
-        value={code}
-        onChange={(e) => setCode(e)}
-        theme={material}
-        height="200px"
-        extensions={[loadLanguage(`${lang}`)!]}
-      />
-      <div style={{ marginTop: "10px" }}>
-        <select
-          onChange={(e) => setLang(e.target.value as LanguageName)}
-          defaultValue="Javascript"
-          style={{ width: "100px", height: "30px" }}
-        >
-          <option>javascript</option>
-          <option>python</option>
-          <option>java</option>
-          <option>cpp</option>
-        </select>
-        <button
-          type="button"
-          onClick={onSubmit}
-          style={{ width: "100px", height: "30px", marginLeft: "8px" }}
-        >
-          제출하기
-        </button>
-      </div>
-      <h2>Output</h2>
-      <div
-        style={{
-          border: "1px solid #ccc",
-          width: "100%",
-          height: "200px",
-          padding: "20px 20px",
-          boxSizing: "border-box",
-          backgroundColor: "#2e3235",
-        }}
-      >
-        {error !== "" && (
-          <p style={{ margin: "0px", color: "#c92c2c" }}>{error}</p>
-        )}
-        {result && (
-          <>
-            <div
-              style={{
-                margin: "0px",
-                padding: "0px",
-                listStyle: "none",
-                color: "#fff",
-              }}
-            >
-              {Object.entries(result).map(([key, value]) => (
-                <li key={key}>
-                  테스트케이스 {Number(key) + 1} :{" "}
-                  <span
-                    style={{
-                      color: value === false ? "red" : "blue",
-                    }}
-                  >
-                    {value === false ? "실패" : "통과"}
-                  </span>
-                </li>
+    <div className="wrapper">
+      <div className="problem">
+        <div className="title">
+          <Link to="/problemList">코딩테스트</Link>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m8.25 4.5 7.5 7.5-7.5 7.5"
+            />
+          </svg>
+          <h1>{problem?.title}</h1>
+        </div>
+        <div className="question">
+          <h2>문제</h2>
+          <p>{problem?.question}</p>
+          <div className="example">
+            <h2>입력예제</h2>
+            <table>
+              <th>입력</th>
+              <th>출력</th>
+              {problem?.example.map((v) => (
+                <tr>
+                  <td>{v.input}</td>
+                  <td>{v.output}</td>
+                </tr>
               ))}
-            </div>
-          </>
-        )}
+            </table>
+          </div>
+        </div>
+      </div>
+      <div className="code-wrapper">
+        <div className="select-lang">
+          <select
+            onChange={(e) => setLang(e.target.value as LanguageName)}
+            defaultValue="Javascript"
+          >
+            <option>javascript</option>
+            <option>python</option>
+            <option>java</option>
+            <option>cpp</option>
+          </select>
+        </div>
+        <div className="codeMirror-wrapper">
+          <CodeMirror
+            value={code}
+            onChange={(e) => setCode(e)}
+            theme={copilot}
+            height="100%"
+            extensions={[loadLanguage(`${lang}`)!]}
+          />
+        </div>
+
+        <div className="output">
+          {error !== "" && (
+            <p style={{ margin: "0px", color: "#c92c2c" }}>{error}</p>
+          )}
+          {result && (
+            <>
+              <div
+                style={{
+                  margin: "0px",
+                  padding: "0px",
+                  listStyle: "none",
+                  color: "#fff",
+                }}
+              >
+                {Object.entries(result).map(([key, value]) => (
+                  <li key={key}>
+                    테스트케이스 {Number(key) + 1} :{" "}
+                    <span
+                      style={{
+                        color: value === false ? "red" : "blue",
+                      }}
+                    >
+                      {value === false ? "실패" : "통과"}
+                    </span>
+                  </li>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="submit">
+          <button type="button" onClick={() => console.log("")}>
+            코드 실행
+          </button>
+          <button type="button" onClick={onSubmit}>
+            제출하기
+          </button>
+        </div>
       </div>
     </div>
   );

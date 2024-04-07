@@ -11,8 +11,12 @@ export interface IProblemInput {
 
 export interface IProblem {
   id: string | undefined;
+  title: string;
   question: string;
-  param: number;
+  example: {
+    input: string;
+    output: string | number | number[];
+  }[];
 }
 
 export interface IOutput {
