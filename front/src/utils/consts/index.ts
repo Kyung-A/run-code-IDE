@@ -1,6 +1,18 @@
 export const defaultCode = {
   python: `a = int(input())`,
-  javscript: `const input = require("fs").readFileSync("/dist/input.txt").toString().trim();`,
+  javscript: `const readline = require("readline");
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  
+rl.on("line", (line) => { 
+    rl.close();
+});
+
+rl.on('close', () => {})
+  `,
   java: `import java.util.Scanner;
 
   public class Main {
