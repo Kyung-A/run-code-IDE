@@ -305,12 +305,8 @@ table {
 dialog {
     width: 100vw;
     height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    padding: 0px;
     border: 0;
+    outline: none;
     background-color: #00000065;
     overflow: hidden;
     & .dialog-content {

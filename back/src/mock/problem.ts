@@ -284,11 +284,11 @@ export const problemTestcase = [
       },
       {
         input: "23564 4",
-        output: "23568",
+        output: "94256",
       },
       {
-        input: "2346567 100000",
-        output: "2446567",
+        input: "123 321",
+        output: "39483",
       },
       {
         input: "1 1",
