@@ -38,7 +38,7 @@ footer, header, hgroup, menu, nav, section {
 }
 html, body {
     font-family: 'Pretendard-Regular';
-	line-height: 1;
+	line-height: 1.3;
 }
 ol, ul {
 	list-style: none;
@@ -122,7 +122,7 @@ table {
 .problem {
     width: 40%;
     height: 100%;
-    color: #fff;
+    color: #e2e2e2;
     & .title {
         width: 100%;
         height: 50px;
@@ -159,6 +159,7 @@ table {
         & p {
             margin: 20px 0px;
             font-weight: 400;
+            white-space: pre-wrap;
         }
         & .example {
             margin-top: 80px;
@@ -171,6 +172,7 @@ table {
                     text-align: left;
                     padding: 10px;
                     border: 1px solid #414547;
+                    white-space: pre-wrap;
                 }
             }
         }
@@ -224,6 +226,11 @@ table {
     padding: 20px 20px;
     box-sizing: border-box;
     background-color: #182025;
+    & h3 {
+        color:#e2e2e2;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
 }
 
 .submit {
@@ -247,4 +254,50 @@ table {
         padding: 8px 30px;
         outline: none;
    }
+}
+
+
+.code-output {
+    width: 100%;
+    margin-bottom: 12px;
+    & tbody {
+        width: 100%;
+        background-color: #232a2f;
+        margin-bottom: 15px;
+        font-size: 14px;
+        border: 1px solid #414547;
+        box-sizing: border-box;
+        & th {
+            width: 15%;
+            color: #8d8d8d;
+            text-align: left;
+            padding: 5px 10px;
+        }
+        & td {
+            width: 80%;
+            color: #e2e2e2;
+            padding: 5px 10px;
+        }
+    }
+}
+
+.result-list {
+    & li {
+        color: #e2e2e2;
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        & .title {
+            color: #8d8d8d;
+        }
+        & .icon {
+            width: 18px;
+            height: 18px;
+            color: #8d8d8d;
+            margin: 0px 6px;
+        }
+        & .loading {
+            color: #8d8d8d;
+        }
+    }
 }

@@ -23,13 +23,19 @@ const Problem = () => {
   const [problem, setProblem] = useState<IProblem>();
   const [code, setCode] = useState<string>("");
   const [lang, setLang] = useState<LanguageName>("javascript");
-  const [result, setResult] = useState<IOutput>();
-  const [error, setError] = useState<string>("");
+  const [result, setResult] = useState<IOutput[] | null>();
+  const [output, setOutput] = useState<IOutput[] | null>();
+  const [error, setError] = useState<string | null>();
 
   const onSubmit = useCallback(() => {
-    setResult({});
-    setError("");
-    socket.emit("join", { room: problemId, id: problemId, code, lang });
+    setResult(null);
+    setOutput(null);
+    setError(null);
+    socket.emit("submit", { room: problemId, id: problemId, code, lang });
+  }, [code, lang, problemId, socket]);
+
+  const onClickCodeRun = useCallback(() => {
+    socket.emit("codeRun", { room: problemId, id: problemId, code, lang });
   }, [code, lang, problemId, socket]);
 
   useEffect(() => {
@@ -39,7 +45,9 @@ const Problem = () => {
   }, [problemId]);
 
   useEffect(() => {
-    setResult({});
+    setResult(null);
+    setOutput(null);
+    setError(null);
     switch (lang) {
       case "javascript":
         setCode(defaultCode.javscript);
@@ -61,6 +69,9 @@ const Problem = () => {
   useEffect(() => {
     socket.on("test", (data) => {
       setResult(data);
+    });
+    socket.on("output", (data) => {
+      setOutput(data);
     });
     socket.on("error", (data) => {
       setError(data);
@@ -134,33 +145,68 @@ const Problem = () => {
           )}
           {result && (
             <>
-              <div
-                style={{
-                  margin: "0px",
-                  padding: "0px",
-                  listStyle: "none",
-                  color: "#fff",
-                }}
-              >
-                {Object.entries(result).map(([key, value]) => (
-                  <li key={key}>
-                    테스트케이스 {Number(key) + 1} :{" "}
-                    <span
-                      style={{
-                        color: value === false ? "red" : "blue",
-                      }}
-                    >
-                      {value === false ? "실패" : "통과"}
-                    </span>
+              <h3>체점 결과</h3>
+              <ul className="result-list">
+                {result.map((v) => (
+                  <li key={v.index}>
+                    <span className="title">테스트케이스 {v.index} </span>
+                    <div className="icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    {v.output === null ? (
+                      <span className="loading">로딩중...</span>
+                    ) : (
+                      <span
+                        style={{
+                          color: v.output === false ? "#c92c2c" : "#004fe7",
+                        }}
+                      >
+                        {v.output === false ? "실패" : "통과"}
+                      </span>
+                    )}
                   </li>
                 ))}
-              </div>
+              </ul>
+            </>
+          )}
+          {output && (
+            <>
+              <h3>실행 결과</h3>
+              {output.map((v, i) => (
+                <table className="code-output" key={i}>
+                  <tbody>
+                    <tr>
+                      <th>입력값</th>
+                      <td>{v.input ?? "로딩중..."}</td>
+                    </tr>
+                    <tr>
+                      <th>기댓값</th>
+                      <td>{v.output ?? "로딩중..."}</td>
+                    </tr>
+                    <tr>
+                      <th>출력</th>
+                      <td>{v.result ?? "로딩중..."}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              ))}
             </>
           )}
         </div>
 
         <div className="submit">
-          <button type="button" onClick={() => console.log("")}>
+          <button type="button" onClick={onClickCodeRun}>
             코드 실행
           </button>
           <button type="button" onClick={onSubmit}>

@@ -20,6 +20,8 @@ export interface IProblem {
 }
 
 export interface IOutput {
-  testcase?: string[];
-  result?: boolean;
+  index?: number;
+  input?: string;
+  output?: any;
+  result?: any;
 }

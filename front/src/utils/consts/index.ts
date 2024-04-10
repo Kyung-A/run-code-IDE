@@ -2,17 +2,19 @@ export const defaultCode = {
   python: `a = int(input())`,
   javscript: `const readline = require("readline");
 
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
   
 rl.on("line", (line) => { 
-    rl.close();
+  rl.close();
 });
 
-rl.on('close', () => {})
-  `,
+rl.on('close', () => {
+  process.exit();
+})
+`,
   java: `import java.util.Scanner;
 
   public class Main {
@@ -21,9 +23,10 @@ rl.on('close', () => {})
   }
 }`,
   cpp: `#include <iostream>
-  using namespace std;
+using namespace std;
   
-  int main(){
-      int a, b;
-  }`,
+int main(){
+  int a, b;
+}
+  `,
 };
