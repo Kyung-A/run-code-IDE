@@ -40,8 +40,7 @@ export const testcaseRun = (socket: any, data: IData) => {
             process.exit();
           }
 
-          const result = typeof res === "object" ? JSON.parse(res) : res.trim();
-          if (result.trim() === test.output) {
+          if (res.trim() === test.output) {
             clientResult[i] = { index: i + 1, output: true };
             socket.emit("test", clientResult);
           } else {
@@ -65,8 +64,7 @@ export const testcaseRun = (socket: any, data: IData) => {
             process.exit();
           }
 
-          const result = typeof res === "object" ? JSON.parse(res) : res.trim();
-          if (result.trim() === test.output) {
+          if (res.trim() === test.output) {
             clientResult[i] = { index: i + 1, output: true };
             socket.emit("test", clientResult);
           } else {
@@ -90,8 +88,7 @@ export const testcaseRun = (socket: any, data: IData) => {
             process.exit();
           }
 
-          const result = typeof res === "object" ? JSON.parse(res) : res.trim();
-          if (result.trim() === test.output) {
+          if (res.trim() === test.output) {
             clientResult[i] = { index: i + 1, output: true };
             socket.emit("test", clientResult);
           } else {
@@ -115,8 +112,7 @@ export const testcaseRun = (socket: any, data: IData) => {
             process.exit();
           }
 
-          const result = typeof res === "object" ? JSON.parse(res) : res.trim();
-          if (result.trim() === test.output) {
+          if (res.trim() === test.output) {
             clientResult[i] = { index: i + 1, output: true };
             socket.emit("test", clientResult);
           } else {
