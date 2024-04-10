@@ -35,6 +35,9 @@ const Problem = () => {
   }, [code, lang, problemId, socket]);
 
   const onClickCodeRun = useCallback(() => {
+    setResult(null);
+    setOutput(null);
+    setError(null);
     socket.emit("codeRun", { room: problemId, id: problemId, code, lang });
   }, [code, lang, problemId, socket]);
 

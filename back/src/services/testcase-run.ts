@@ -4,6 +4,7 @@ import { problemTestcase } from "../mock/problem";
 import { dockerBuild } from "../helper/docker-build";
 import { dockerRun } from "../helper/docker-run";
 import { IData } from "./problem-socket";
+import { cleanDirectory } from "../helper/clean-directory";
 
 interface IClientResult {
   index: number;
@@ -15,7 +16,7 @@ export const testcaseRun = (socket: any, data: IData) => {
   const { id, code, lang } = data;
 
   const testcase = problemTestcase.find((v) => v.id === id);
-  const filePath = "dist";
+  const filePath = "compile";
   const clientResult: IClientResult[] = Array.from(
     { length: testcase?.testcase.length as number },
     (_, i) => ({
@@ -129,4 +130,6 @@ export const testcaseRun = (socket: any, data: IData) => {
     default:
       return;
   }
+
+  cleanDirectory(filePath);
 };
