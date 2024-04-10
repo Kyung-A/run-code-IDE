@@ -65,11 +65,11 @@ export const problem = [
     example: [
       {
         input: "3 6",
-        output: 9,
+        output: "9",
       },
       {
         input: "16 8",
-        output: 24,
+        output: "24",
       },
     ],
   },
@@ -81,11 +81,11 @@ export const problem = [
     example: [
       {
         input: "3 6",
-        output: -3,
+        output: "-3",
       },
       {
         input: "16 8",
-        output: 8,
+        output: "8",
       },
     ],
   },
@@ -113,7 +113,7 @@ export const problem = [
     example: [
       {
         input: "2541",
-        output: 1998,
+        output: "1998",
       },
     ],
   },
@@ -230,19 +230,19 @@ export const problemTestcase = [
     testcase: [
       {
         input: "3 6",
-        output: 9,
+        output: "9",
       },
       {
         input: "2 1",
-        output: 3,
+        output: "3",
       },
       {
         input: "100 12",
-        output: 112,
+        output: "112",
       },
       {
         input: "923854 2345",
-        output: 926199,
+        output: "926199",
       },
     ],
   },
@@ -251,31 +251,19 @@ export const problemTestcase = [
     testcase: [
       {
         input: [-3, 6],
-        output: {
-          type: "number",
-          result: -9,
-        },
+        output: "-9",
       },
       {
         input: [2, 1],
-        output: {
-          type: "number",
-          result: 1,
-        },
+        output: "1",
       },
       {
         input: [-100, -12],
-        output: {
-          type: "number",
-          result: 88,
-        },
+        output: "88",
       },
       {
         input: [77, 10],
-        output: {
-          type: "number",
-          result: 67,
-        },
+        output: "67",
       },
     ],
   },
@@ -284,27 +272,27 @@ export const problemTestcase = [
     testcase: [
       {
         input: "1 2",
-        output: 2,
+        output: "2",
       },
       {
         input: "3 4",
-        output: 12,
+        output: "12",
       },
       {
         input: "12 5",
-        output: 60,
+        output: "60",
       },
       {
         input: "23564 4",
-        output: 23568,
+        output: "23568",
       },
       {
         input: "2346567 100000",
-        output: 2446567,
+        output: "2446567",
       },
       {
         input: "1 1",
-        output: 1,
+        output: "1",
       },
     ],
   },
@@ -313,43 +301,43 @@ export const problemTestcase = [
     testcase: [
       {
         input: "2541",
-        output: 1998,
+        output: "1998",
       },
       {
         input: "9999",
-        output: 9456,
+        output: "9456",
       },
       {
         input: "1111",
-        output: 568,
+        output: "568",
       },
       {
         input: "1234",
-        output: 691,
+        output: "691",
       },
       {
         input: "543",
-        output: 0,
+        output: "0",
       },
       {
         input: "555",
-        output: 12,
+        output: "12",
       },
       {
         input: "544",
-        output: 1,
+        output: "1",
       },
       {
         input: "0",
-        output: -543,
+        output: "-543",
       },
       {
         input: "326",
-        output: 217,
+        output: "217",
       },
       {
         input: "2541",
-        output: 1998,
+        output: "1998",
       },
     ],
   },
@@ -433,35 +421,35 @@ export const problemTestcase = [
     testcase: [
       {
         input: "6",
-        output: 4,
+        output: "4",
       },
       {
         input: "32",
-        output: 32,
+        output: "32",
       },
       {
         input: "8",
-        output: 8,
+        output: "8",
       },
       {
         input: "32",
-        output: 32,
+        output: "32",
       },
       {
         input: "16",
-        output: 16,
+        output: "16",
       },
       {
         input: "12",
-        output: 8,
+        output: "8",
       },
       {
         input: "15",
-        output: 14,
+        output: "14",
       },
       {
         input: "20",
-        output: 8,
+        output: "8",
       },
     ],
   },
@@ -470,23 +458,23 @@ export const problemTestcase = [
     testcase: [
       {
         input: "10 11 12",
-        output: 4,
+        output: "4",
       },
       {
         input: "2147483647 2147483647 100001",
-        output: 7569,
+        output: "7569",
       },
       {
         input: "6 11 13",
-        output: 11,
+        output: "11",
       },
       {
         input: "4 1 2",
-        output: 0,
+        output: "0",
       },
       {
         input: "99999 99999 100000",
-        output: 99999,
+        output: "99999",
       },
     ],
   },
