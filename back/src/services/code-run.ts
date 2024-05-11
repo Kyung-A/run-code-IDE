@@ -5,11 +5,16 @@ import { dockerBuild } from "../helper/docker-build";
 import { dockerRun } from "../helper/docker-run";
 import { IData } from "./problem-socket";
 import { cleanDirectory } from "../helper/clean-directory";
+import { exec, execSync } from "child_process";
 
 interface IClientResult {
   input: string | null;
   output: any | null;
   result: any | null;
+}
+
+interface IProps {
+  [key: string]: string;
 }
 
 // TODO: 리팩토링 필요
@@ -18,6 +23,12 @@ export const codeRun = (socket: any, data: IData) => {
 
   const testcase = problem.find((v) => v.id === id);
   const filePath = "compile";
+  const fileName: IProps = {
+    javascript: "code.js",
+    python: "code.py",
+    java: "Main.java",
+    cpp: "main.cpp",
+  };
   const clientResult: IClientResult[] = Array.from(
     { length: testcase?.example.length as number },
     (_, i) => ({
@@ -28,13 +39,14 @@ export const codeRun = (socket: any, data: IData) => {
   );
   socket.emit("output", clientResult);
 
+  fs.writeFileSync(`${filePath}/${fileName[lang]}`, code);
+  // execSync(`docker run -d -it --name test-app myimage:latest`);
+  execSync(`docker cp compile/. test-app:/usr/src`);
+
   switch (lang) {
     case "javascript":
-      fs.writeFileSync(`${filePath}/code.js`, code);
-      dockerBuild(lang);
-
       testcase?.example.forEach((test, i) => {
-        const command = `docker run --rm -e ARGS="${test.input}" -i node:16`;
+        const command = `docker exec test-app sh -c "echo -e '${test.input}' | node code.js"`;
 
         dockerRun(command, (err: string, res: any) => {
           if (err) {
@@ -50,11 +62,8 @@ export const codeRun = (socket: any, data: IData) => {
       break;
 
     case "python":
-      fs.writeFileSync(`${filePath}/code.py`, code);
-      dockerBuild(lang);
-
       testcase?.example.forEach((test, i) => {
-        const command = `docker run --rm -e ARGS="${test.input}" -i python:3`;
+        const command = `docker exec test-app sh -c "echo -e '${test.input}' | python3 code.py"`;
 
         dockerRun(command, (err: string, res: any) => {
           if (err) {
@@ -70,11 +79,9 @@ export const codeRun = (socket: any, data: IData) => {
       break;
 
     case "java":
-      fs.writeFileSync(`${filePath}/Main.java`, code);
-      dockerBuild(lang);
-
       testcase?.example.forEach((test, i) => {
-        const command = `docker run --rm -e ARGS="${test.input}" -i openjdk:11`;
+        execSync(`docker exec test-app sh -c "javac Main.java"`);
+        const command = `docker exec test-app sh -c "echo -e '${test.input}' | java Main"`;
 
         dockerRun(command, (err: string, res: any) => {
           if (err) {
@@ -90,11 +97,9 @@ export const codeRun = (socket: any, data: IData) => {
       break;
 
     case "cpp":
-      fs.writeFileSync(`${filePath}/main.cpp`, code);
-      dockerBuild(lang);
-
       testcase?.example.forEach((test, i) => {
-        const command = `docker run --rm -e ARGS="${test.input}" -i cpp:latest`;
+        execSync(`docker exec test-app sh -c "g++ -o main main.cpp"`);
+        const command = `docker exec test-app sh -c "echo -e '${test.input}' | ./main"`;
 
         dockerRun(command, (err: string, res: any) => {
           if (err) {
@@ -113,5 +118,7 @@ export const codeRun = (socket: any, data: IData) => {
       return;
   }
 
-  cleanDirectory(filePath);
+  // exec("docker stop test-app");
+  // exec("docker rm test-app");
+  // cleanDirectory(filePath);
 };
