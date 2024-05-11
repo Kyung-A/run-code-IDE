@@ -32,7 +32,7 @@ export const testcaseRun = (socket: any, data: IData) => {
       dockerBuild(lang);
 
       testcase?.testcase.forEach((test, i) => {
-        const command = `echo ${test.input} | docker run --rm -i node:16`;
+        const command = `docker run --rm -e ARGS="${test.input}" -i node:16`;
 
         dockerRun(command, (err: string, res: any) => {
           if (err) {
@@ -56,7 +56,7 @@ export const testcaseRun = (socket: any, data: IData) => {
       dockerBuild(lang);
 
       testcase?.testcase.forEach((test, i) => {
-        const command = `echo ${test.input} | docker run --rm -i python:3`;
+        const command = `docker run --rm -e ARGS="${test.input}" -i python:3`;
 
         dockerRun(command, (err: string, res: any) => {
           if (err) {
@@ -64,7 +64,12 @@ export const testcaseRun = (socket: any, data: IData) => {
             process.exit();
           }
 
-          if (res.trim() === test.output) {
+          const output =
+            typeof test.output === "string" && test.output.includes("\\n")
+              ? test.output.split("\\n").join("\n")
+              : test.output;
+
+          if (res.trim() === output) {
             clientResult[i] = { index: i + 1, output: true };
             socket.emit("test", clientResult);
           } else {
@@ -80,7 +85,7 @@ export const testcaseRun = (socket: any, data: IData) => {
       dockerBuild(lang);
 
       testcase?.testcase.forEach((test, i) => {
-        const command = `echo ${test.input} | docker run --rm -i openjdk:11`;
+        const command = `docker run --rm -e ARGS="${test.input}" -i openjdk:11`;
 
         dockerRun(command, (err: string, res: any) => {
           if (err) {
@@ -104,7 +109,7 @@ export const testcaseRun = (socket: any, data: IData) => {
       dockerBuild(lang);
 
       testcase?.testcase.forEach((test, i) => {
-        const command = `echo ${test.input} | docker run --rm -i cpp:latest`;
+        const command = `docker run --rm -e ARGS="${test.input}" -i cpp:latest`;
 
         dockerRun(command, (err: string, res: any) => {
           if (err) {
@@ -127,5 +132,5 @@ export const testcaseRun = (socket: any, data: IData) => {
       return;
   }
 
-  cleanDirectory(filePath);
+  // cleanDirectory(filePath);
 };

@@ -34,7 +34,7 @@ export const codeRun = (socket: any, data: IData) => {
       dockerBuild(lang);
 
       testcase?.example.forEach((test, i) => {
-        const command = `echo ${test.input} | docker run --rm -i node:16`;
+        const command = `docker run --rm -e ARGS="${test.input}" -i node:16`;
 
         dockerRun(command, (err: string, res: any) => {
           if (err) {
@@ -54,7 +54,7 @@ export const codeRun = (socket: any, data: IData) => {
       dockerBuild(lang);
 
       testcase?.example.forEach((test, i) => {
-        const command = `echo ${test.input} | docker run --rm -i python:3`;
+        const command = `docker run --rm -e ARGS="${test.input}" -i python:3`;
 
         dockerRun(command, (err: string, res: any) => {
           if (err) {
@@ -74,7 +74,7 @@ export const codeRun = (socket: any, data: IData) => {
       dockerBuild(lang);
 
       testcase?.example.forEach((test, i) => {
-        const command = `echo ${test.input} | docker run --rm -i openjdk:11`;
+        const command = `docker run --rm -e ARGS="${test.input}" -i openjdk:11`;
 
         dockerRun(command, (err: string, res: any) => {
           if (err) {
@@ -94,7 +94,7 @@ export const codeRun = (socket: any, data: IData) => {
       dockerBuild(lang);
 
       testcase?.example.forEach((test, i) => {
-        const command = `echo ${test.input} | docker run --rm -i cpp:latest`;
+        const command = `docker run --rm -e ARGS="${test.input}" -i cpp:latest`;
 
         dockerRun(command, (err: string, res: any) => {
           if (err) {

@@ -1,5 +1,5 @@
 export const defaultCode = {
-  python: `a = int(input())`,
+  python: `arg = input()`,
   javscript: `const readline = require("readline");
 
 const rl = readline.createInterface({

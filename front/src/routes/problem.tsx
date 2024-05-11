@@ -138,12 +138,22 @@ const Problem = () => {
                   <th>출력</th>
                 </thead>
                 <tbody>
-                  {problem?.example.map((v, i) => (
-                    <tr key={i}>
-                      <td>{v.input}</td>
-                      <td>{v.output}</td>
-                    </tr>
-                  ))}
+                  {problem?.example.map((v, i) => {
+                    const input = v.input.includes("\\n")
+                      ? v.input.split("\\n").join("\n")
+                      : v.input;
+                    const output =
+                      typeof v.output === "string" && v.output.includes("\\n")
+                        ? v.output.split("\\n").join("\n")
+                        : v.output;
+
+                    return (
+                      <tr key={i}>
+                        <td style={{ whiteSpace: "pre-line" }}>{input}</td>
+                        <td style={{ whiteSpace: "pre-line" }}>{output}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -215,24 +225,44 @@ const Problem = () => {
             {output && (
               <>
                 <h3>실행 결과</h3>
-                {output.map((v, i) => (
-                  <table className="code-output" key={i}>
-                    <tbody>
-                      <tr>
-                        <th>입력값</th>
-                        <td>{v.input ?? "로딩중..."}</td>
-                      </tr>
-                      <tr>
-                        <th>기댓값</th>
-                        <td>{v.output ?? "로딩중..."}</td>
-                      </tr>
-                      <tr>
-                        <th>출력</th>
-                        <td>{v.result ?? "로딩중..."}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                ))}
+                {output.map((v, i) => {
+                  const input = v.input?.includes("\\n")
+                    ? v.input.split("\\n").join("\n")
+                    : v.input;
+                  const output =
+                    typeof v.output === "string" && v.output.includes("\\n")
+                      ? v.output.split("\\n").join("\n")
+                      : v.output;
+                  const result =
+                    typeof v.result === "string" && v.result.includes("\\n")
+                      ? v.result.split("\\n").join("\n")
+                      : v.result;
+
+                  return (
+                    <table className="code-output" key={i}>
+                      <tbody>
+                        <tr>
+                          <th>입력값</th>
+                          <td style={{ whiteSpace: "pre-line" }}>
+                            {input ?? "로딩중..."}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>기댓값</th>
+                          <td style={{ whiteSpace: "pre-line" }}>
+                            {output ?? "로딩중..."}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>출력</th>
+                          <td style={{ whiteSpace: "pre-line" }}>
+                            {result ?? "로딩중..."}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  );
+                })}
               </>
             )}
           </div>
