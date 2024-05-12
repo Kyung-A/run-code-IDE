@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link, useBlocker, useNavigate } from "react-router-dom";
 import CodeMirror from "@uiw/react-codemirror";
 import { copilot } from "@uiw/codemirror-theme-copilot";
 import io from "socket.io-client";
@@ -8,7 +8,6 @@ import { LanguageName, loadLanguage } from "@uiw/codemirror-extensions-langs";
 import { requestProblem } from "../apis/problemApi";
 import { IOutput, IProblem } from "../types";
 import { defaultCode } from "../utils/consts";
-import { Link } from "react-router-dom";
 
 interface IDialog {
   title: string;
@@ -17,9 +16,11 @@ interface IDialog {
 
 const Problem = () => {
   const { problemId } = useParams();
+  const navigate = useNavigate();
+  let blocker = useBlocker(true);
 
   const socket = io("http://localhost:3001/problem", {
-    reconnectionDelayMax: 10000,
+    reconnection: true,
     query: {
       problem: problemId,
     },
@@ -105,6 +106,30 @@ const Problem = () => {
     });
   }, [socket]);
 
+  useEffect(() => {
+    const onBeforeUnload = (e: { preventDefault: () => void }) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", onBeforeUnload);
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    if (blocker.state === "blocked") {
+      const isTrue = window.confirm("변경사항이 저장되지 않을 수 있습니다.");
+
+      if (isTrue) {
+        blocker.proceed();
+        navigate("/");
+      } else {
+        blocker.reset();
+      }
+    }
+  }, [blocker, navigate]);
+
   return (
     <>
       <div className="wrapper">
@@ -133,11 +158,11 @@ const Problem = () => {
             <div className="example">
               <h2>입력예제</h2>
               <table>
-                <thead>
-                  <th>입력</th>
-                  <th>출력</th>
-                </thead>
                 <tbody>
+                  <tr>
+                    <th>입력</th>
+                    <th>출력</th>
+                  </tr>
                   {problem?.example.map((v, i) => {
                     const input = v.input.includes("\\n")
                       ? v.input.split("\\n").join("\n")
