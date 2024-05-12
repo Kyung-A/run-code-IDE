@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 
 import { testcaseRun } from "./testcase-run";
 import { codeRun } from "./code-run";
+import { exec } from "child_process";
 
 export interface IData {
   id: string;
@@ -16,6 +17,7 @@ export const problemSocket = (io: Server) => {
   problem.on("connection", (socket: any) => {
     console.log("connected");
     socket.room = "";
+    // exec(`docker run -d -it --name test-app myimage:latest`);
 
     socket.on("codeRun", async (data: IData) => {
       socket.room = data.room;
@@ -25,6 +27,12 @@ export const problemSocket = (io: Server) => {
     socket.on("submit", async (data: IData) => {
       socket.room = data.room;
       testcaseRun(socket, data);
+    });
+
+    socket.on("disconnect", () => {
+      exec("docker stop test-app");
+      exec("docker rm test-app");
+      console.log("연결이 끊어졌습니다.");
     });
   });
 };

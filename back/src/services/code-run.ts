@@ -1,11 +1,11 @@
 import fs from "fs";
 
 import { problem } from "../mock/problem";
-import { dockerBuild } from "../helper/docker-build";
 import { dockerRun } from "../helper/docker-run";
 import { IData } from "./problem-socket";
 import { cleanDirectory } from "../helper/clean-directory";
 import { exec, execSync } from "child_process";
+import { fileName, filePath } from "../consts";
 
 interface IClientResult {
   input: string | null;
@@ -13,22 +13,10 @@ interface IClientResult {
   result: any | null;
 }
 
-interface IProps {
-  [key: string]: string;
-}
-
-// TODO: 리팩토링 필요
 export const codeRun = (socket: any, data: IData) => {
   const { id, code, lang } = data;
 
   const testcase = problem.find((v) => v.id === id);
-  const filePath = "compile";
-  const fileName: IProps = {
-    javascript: "code.js",
-    python: "code.py",
-    java: "Main.java",
-    cpp: "main.cpp",
-  };
   const clientResult: IClientResult[] = Array.from(
     { length: testcase?.example.length as number },
     (_, i) => ({
@@ -37,10 +25,9 @@ export const codeRun = (socket: any, data: IData) => {
       result: null,
     })
   );
-  socket.emit("output", clientResult);
 
+  socket.emit("output", clientResult);
   fs.writeFileSync(`${filePath}/${fileName[lang]}`, code);
-  // execSync(`docker run -d -it --name test-app myimage:latest`);
   execSync(`docker cp compile/. test-app:/usr/src`);
 
   switch (lang) {
@@ -118,7 +105,5 @@ export const codeRun = (socket: any, data: IData) => {
       return;
   }
 
-  // exec("docker stop test-app");
-  // exec("docker rm test-app");
-  // cleanDirectory(filePath);
+  cleanDirectory(filePath);
 };
