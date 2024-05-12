@@ -14,7 +14,7 @@ router.get("/", (_, res: Response) => {
 
 router.get("/:problemId", (req: Request, res: Response) => {
   try {
-    exec(`docker run -d -it --name test-app myimage:latest`);
+    exec(`docker run --rm -d -it --name test-app myimage:latest`);
     const id = req.params.problemId;
     const data = problem.find((v) => v.id === id);
     res.status(200).send(data);

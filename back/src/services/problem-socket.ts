@@ -31,7 +31,7 @@ export const problemSocket = (io: Server) => {
     socket.on("disconnect", () => {
       exec("docker stop test-app");
       exec("docker rm test-app");
-      console.log("연결이 끊어졌습니다.");
+      console.log("disconnect");
     });
   });
 };
