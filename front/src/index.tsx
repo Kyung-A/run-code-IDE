@@ -4,6 +4,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import App from "./App";
 import Problem from "./routes/problem";
+import ProblemList from "./routes/problemList";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -15,7 +16,11 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: ":problemId",
+    path: "problemList",
+    element: <ProblemList />,
+  },
+  {
+    path: "problemList/:problemId",
     element: <Problem />,
   },
 ]);

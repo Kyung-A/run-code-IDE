@@ -135,7 +135,7 @@ const Problem = () => {
       <div className="wrapper">
         <div className="problem">
           <div className="title">
-            <Link to="/">코딩테스트</Link>
+            <Link to="/problemList">코딩테스트</Link>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

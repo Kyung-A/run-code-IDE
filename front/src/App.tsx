@@ -1,36 +1,16 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
-import { IProblemList } from "./types";
-import { requestProblemList } from "./apis/problemApi";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./Main.css";
 
 function App() {
-  const [data, setDate] = useState<IProblemList[]>();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    requestProblemList().then((rep) => setDate(rep.data));
-  }, []);
+    navigate("/problemList");
+  }, [navigate]);
 
-  return (
-    <div className="App">
-      <div className="problem-list-wrapper">
-        <div className="wapper-inner">
-          <h1>문제 목록</h1>
-          <div className="problem-list">
-            <ul>
-              {data?.map((v) => (
-                <li key={v.id}>
-                  <Link to={`${v.id}`}>{v.title}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  return null;
 }
 
 export default App;
