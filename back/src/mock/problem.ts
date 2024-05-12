@@ -232,8 +232,8 @@ export const problemTestcase = [
         output: "KyuungA gaejjeol-eo",
       },
       {
-        input: "Like and subscribe to KyuungA's YouTube channel",
-        output: "Like and subscribe to KyuungA's YouTube channel",
+        input: "Like and subscribe to KyuungA YouTube channel",
+        output: "Like and subscribe to KyuungA YouTube channel",
       },
       {
         input: "eojjeolago",
