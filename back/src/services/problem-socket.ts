@@ -17,7 +17,6 @@ export const problemSocket = (io: Server) => {
   problem.on("connection", (socket: any) => {
     console.log("connected");
     socket.room = "";
-    // exec(`docker run -d -it --name test-app myimage:latest`);
 
     socket.on("codeRun", async (data: IData) => {
       socket.room = data.room;
