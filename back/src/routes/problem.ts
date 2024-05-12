@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { problemList, problem } from "../mock/problem";
-import { exec } from "child_process";
+import { exec, execSync } from "child_process";
+import { dockerBuild } from "../helper/docker-build";
 
 const router = express.Router();
 
@@ -14,7 +15,17 @@ router.get("/", (_, res: Response) => {
 
 router.get("/:problemId", (req: Request, res: Response) => {
   try {
-    exec(`docker run --rm -d -it --name test-app myimage:latest`);
+    const imageExists = execSync(`docker images -q kyunga/all-lang:latest`)
+      .toString()
+      .trim();
+
+    if (!imageExists) {
+      dockerBuild();
+      execSync(`docker run --rm -d -it --name test-app kyunga/all-lang:latest`);
+    } else {
+      exec(`docker run --rm -d -it --name test-app kyunga/all-lang:latest`);
+    }
+
     const id = req.params.problemId;
     const data = problem.find((v) => v.id === id);
     res.status(200).send(data);
