@@ -1,22 +1,7 @@
 import { execSync } from "child_process";
 
-interface IProps {
-  [key: string]: {
-    name: string;
-    path: string;
-  };
-}
-
-const build: IProps = {
-  javascript: { name: "node:16", path: "src/docker/js/Dockerfile" },
-  python: { name: "python:3", path: "src/docker/python/Dockerfile" },
-  java: { name: "openjdk:11", path: "src/docker/java/Dockerfile" },
-  cpp: { name: "cpp:latest", path: "src/docker/cpp/Dockerfile" },
-};
-
-export const dockerBuild = (lang: string) => {
+export const dockerBuild = () => {
   try {
-    // execSync(`docker build -t ${build[lang].name} -f ${build[lang].path} .`);
     execSync(`docker build -t myimage:latest -f src/docker/Dockerfile .`);
   } catch (error) {
     console.error(
