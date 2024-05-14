@@ -9,7 +9,7 @@ import { problemSocket } from "./services/problem-socket";
 
 const app: Application = express();
 const server = http.createServer(app);
-const port: number = 80;
+const port: number = 8080;
 
 app.use(
   cors({
