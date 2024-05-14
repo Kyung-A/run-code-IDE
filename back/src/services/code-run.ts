@@ -28,7 +28,13 @@ export const codeRun = (socket: any, data: IData) => {
 
   socket.emit("output", clientResult);
   fs.writeFileSync(`${filePath}/${fileName[lang]}`, code);
-  execSync(`docker cp compile/. test-app:/usr/src`);
+  try {
+    execSync(`docker cp compile/. test-app:/usr/src`);
+  } catch (err) {
+    console.error(err);
+    socket.emit("error", "not compile");
+    return;
+  }
 
   switch (lang) {
     case "javascript":
@@ -38,12 +44,13 @@ export const codeRun = (socket: any, data: IData) => {
         dockerRun(command, (err: string, res: any) => {
           if (err) {
             socket.emit("error", err);
-            process.exit();
+            return;
           }
 
           const result = typeof res === "object" ? JSON.parse(res) : res;
           clientResult[i] = { ...test, result };
           socket.emit("output", clientResult);
+          return;
         });
       });
       break;
@@ -55,12 +62,13 @@ export const codeRun = (socket: any, data: IData) => {
         dockerRun(command, (err: string, res: any) => {
           if (err) {
             socket.emit("error", err);
-            process.exit();
+            return;
           }
 
           const result = typeof res === "object" ? JSON.parse(res) : res;
           clientResult[i] = { ...test, result };
           socket.emit("output", clientResult);
+          return;
         });
       });
       break;
@@ -73,12 +81,13 @@ export const codeRun = (socket: any, data: IData) => {
         dockerRun(command, (err: string, res: any) => {
           if (err) {
             socket.emit("error", err);
-            process.exit();
+            return;
           }
 
           const result = typeof res === "object" ? JSON.parse(res) : res;
           clientResult[i] = { ...test, result };
           socket.emit("output", clientResult);
+          return;
         });
       });
       break;
@@ -91,12 +100,13 @@ export const codeRun = (socket: any, data: IData) => {
         dockerRun(command, (err: string, res: any) => {
           if (err) {
             socket.emit("error", err);
-            process.exit();
+            return;
           }
 
           const result = typeof res === "object" ? JSON.parse(res) : res;
           clientResult[i] = { ...test, result };
           socket.emit("output", clientResult);
+          return;
         });
       });
       break;
@@ -106,4 +116,5 @@ export const codeRun = (socket: any, data: IData) => {
   }
 
   cleanDirectory(filePath);
+  return;
 };

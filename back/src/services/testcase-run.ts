@@ -25,7 +25,13 @@ export const testcaseRun = (socket: any, data: IData) => {
   );
   socket.emit("test", clientResult);
   fs.writeFileSync(`${filePath}/${fileName[lang]}`, code);
-  execSync(`docker cp compile/. test-app:/usr/src`);
+  try {
+    execSync(`docker cp compile/. test-app:/usr/src`);
+  } catch (err) {
+    console.error(err);
+    socket.emit("error", "not compile");
+    return;
+  }
 
   switch (lang) {
     case "javascript":
@@ -35,15 +41,17 @@ export const testcaseRun = (socket: any, data: IData) => {
         dockerRun(command, (err: string, res: any) => {
           if (err) {
             socket.emit("error", err);
-            process.exit();
+            return;
           }
 
           if (res.trim() === test.output) {
             clientResult[i] = { index: i + 1, output: true };
             socket.emit("test", clientResult);
+            return;
           } else {
             clientResult[i] = { index: i + 1, output: false };
             socket.emit("test", clientResult);
+            return;
           }
         });
       });
@@ -56,7 +64,7 @@ export const testcaseRun = (socket: any, data: IData) => {
         dockerRun(command, (err: string, res: any) => {
           if (err) {
             socket.emit("error", err);
-            process.exit();
+            return;
           }
 
           const output =
@@ -67,9 +75,11 @@ export const testcaseRun = (socket: any, data: IData) => {
           if (res.trim() === output) {
             clientResult[i] = { index: i + 1, output: true };
             socket.emit("test", clientResult);
+            return;
           } else {
             clientResult[i] = { index: i + 1, output: false };
             socket.emit("test", clientResult);
+            return;
           }
         });
       });
@@ -83,15 +93,17 @@ export const testcaseRun = (socket: any, data: IData) => {
         dockerRun(command, (err: string, res: any) => {
           if (err) {
             socket.emit("error", err);
-            process.exit();
+            return;
           }
 
           if (res.trim() === test.output) {
             clientResult[i] = { index: i + 1, output: true };
             socket.emit("test", clientResult);
+            return;
           } else {
             clientResult[i] = { index: i + 1, output: false };
             socket.emit("test", clientResult);
+            return;
           }
         });
       });
@@ -105,15 +117,17 @@ export const testcaseRun = (socket: any, data: IData) => {
         dockerRun(command, (err: string, res: any) => {
           if (err) {
             socket.emit("error", err);
-            process.exit();
+            return;
           }
 
           if (res.trim() === test.output) {
             clientResult[i] = { index: i + 1, output: true };
             socket.emit("test", clientResult);
+            return;
           } else {
             clientResult[i] = { index: i + 1, output: false };
             socket.emit("test", clientResult);
+            return;
           }
         });
       });
@@ -124,4 +138,5 @@ export const testcaseRun = (socket: any, data: IData) => {
   }
 
   cleanDirectory(filePath);
+  return;
 };
