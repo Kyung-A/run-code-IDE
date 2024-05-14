@@ -207,87 +207,99 @@ const Problem = () => {
           </div>
 
           <div className="output">
-            {error && (
-              <p style={{ margin: "0px", color: "#c92c2c" }}>{error}</p>
-            )}
-            {result && (
+            {error ? (
+              <p
+                style={{
+                  margin: "0px",
+                  color: "#c92c2c",
+                  whiteSpace: "pre-wrap",
+                }}
+              >
+                {error}
+              </p>
+            ) : (
               <>
-                <h3>체점 결과</h3>
-                <ul className="result-list">
-                  {result.map((v) => (
-                    <li key={v.index}>
-                      <span className="title">테스트케이스 {v.index} </span>
-                      <div className="icon">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          className="w-6 h-6"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                      {v.output === null ? (
-                        <span className="loading">로딩중...</span>
-                      ) : (
-                        <span
-                          style={{
-                            color: v.output === false ? "#c92c2c" : "#004fe7",
-                          }}
-                        >
-                          {v.output === false ? "실패" : "통과"}
-                        </span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-            {output && (
-              <>
-                <h3>실행 결과</h3>
-                {output.map((v, i) => {
-                  const input = v.input?.includes("\\n")
-                    ? v.input.split("\\n").join("\n")
-                    : v.input;
-                  const output =
-                    typeof v.output === "string" && v.output.includes("\\n")
-                      ? v.output.split("\\n").join("\n")
-                      : v.output;
-                  const result =
-                    typeof v.result === "string" && v.result.includes("\\n")
-                      ? v.result.split("\\n").join("\n")
-                      : v.result;
+                {output && (
+                  <>
+                    <h3>실행 결과</h3>
+                    {output.map((v, i) => {
+                      const input = v.input?.includes("\\n")
+                        ? v.input.split("\\n").join("\n")
+                        : v.input;
+                      const output =
+                        typeof v.output === "string" && v.output.includes("\\n")
+                          ? v.output.split("\\n").join("\n")
+                          : v.output;
+                      const result =
+                        typeof v.result === "string" && v.result.includes("\\n")
+                          ? v.result.split("\\n").join("\n")
+                          : v.result;
 
-                  return (
-                    <table className="code-output" key={i}>
-                      <tbody>
-                        <tr>
-                          <th>입력값</th>
-                          <td style={{ whiteSpace: "pre-line" }}>
-                            {input ?? "로딩중..."}
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>기댓값</th>
-                          <td style={{ whiteSpace: "pre-line" }}>
-                            {output ?? "로딩중..."}
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>출력</th>
-                          <td style={{ whiteSpace: "pre-line" }}>
-                            {result ?? "로딩중..."}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  );
-                })}
+                      return (
+                        <table className="code-output" key={i}>
+                          <tbody>
+                            <tr>
+                              <th>입력값</th>
+                              <td style={{ whiteSpace: "pre-line" }}>
+                                {input ?? "로딩중..."}
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>기댓값</th>
+                              <td style={{ whiteSpace: "pre-line" }}>
+                                {output ?? "로딩중..."}
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>출력</th>
+                              <td style={{ whiteSpace: "pre-line" }}>
+                                {result ?? "로딩중..."}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      );
+                    })}
+                  </>
+                )}
+                {result && (
+                  <>
+                    <h3>체점 결과</h3>
+                    <ul className="result-list">
+                      {result.map((v) => (
+                        <li key={v.index}>
+                          <span className="title">테스트케이스 {v.index} </span>
+                          <div className="icon">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              className="w-6 h-6"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </div>
+                          {v.output === null ? (
+                            <span className="loading">로딩중...</span>
+                          ) : (
+                            <span
+                              style={{
+                                color:
+                                  v.output === false ? "#c92c2c" : "#004fe7",
+                              }}
+                            >
+                              {v.output === false ? "실패" : "통과"}
+                            </span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
               </>
             )}
           </div>
