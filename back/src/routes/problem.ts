@@ -15,16 +15,8 @@ router.get("/", (_, res: Response) => {
 
 router.get("/:problemId", (req: Request, res: Response) => {
   try {
-    // const imageExists = execSync(`docker images -q kyunga/all-lang:latest`)
-    //   .toString()
-    //   .trim();
-
-    // if (!imageExists) {
-    //   dockerBuild();
-    //   execSync(`docker run --rm -d -it --name test-app kyunga/all-lang:latest`);
-    // } else {
-    //   exec(`docker run --rm -d -it --name test-app kyunga/all-lang:latest`);
-    // }
+    // dockerBuild();
+    // execSync(`docker run --rm -d -it --name test-app kyunga/all-lang:latest`);
 
     const id = req.params.problemId;
     const data = problem.find((v) => v.id === id);
