@@ -16,6 +16,7 @@
     "@uiw/codemirror-theme-material": "^4.21.22",
     "@uiw/react-codemirror": "^4.21.21",
     "axios": "^1.6.7",
+    "env-cmd": "^10.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.1",
@@ -25,8 +26,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts start",
+    "build": "env-cmd -f .env.production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

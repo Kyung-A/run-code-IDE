@@ -19,10 +19,10 @@ const Problem = () => {
   const navigate = useNavigate();
   let blocker = useBlocker(true);
 
-  const socket = io("http://localhost:3001/problem", {
-    reconnection: true,
+  const socket = io(`${process.env.REACT_APP_API_ENDPOINT}/problem`, {
     query: {
       problem: problemId,
+      path: "*",
     },
   });
 

@@ -29,8 +29,8 @@ export const problemSocket = (io: Server) => {
     });
 
     socket.on("disconnect", () => {
-      exec("docker stop test-app");
-      exec("docker rm test-app");
+      // exec("docker stop test-app");
+      // exec("docker rm test-app");
       console.log("disconnect");
     });
   });

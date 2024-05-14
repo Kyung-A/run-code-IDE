@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/app.ts",
   "scripts": {
-    "dev": "nodemon src/app.ts"
+    "start": "nodemon --exec npx ts-node src/app.ts"
   },
   "author": "",
   "license": "ISC",
