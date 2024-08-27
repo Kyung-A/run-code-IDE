@@ -18,6 +18,7 @@ jobs:
           key: ${{ secrets.REMOTE_PRIVATE_KEY }}
           port: ${{ secrets.REMOTE_SSH_PORT }}
           script: | # 실행될 스크립트
+            nvm use 16.20.2
             cd /home/ec2-user/run-code-IDE
             git pull
             pm2 restart run-code-IDE
