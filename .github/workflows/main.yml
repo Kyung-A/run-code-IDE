@@ -22,6 +22,5 @@ jobs:
             cd /home/ec2-user/run-code-IDE
             git pull
             cd front 
-            npm i
             npm run build
             pm2 restart app
