@@ -22,6 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const io = new Server(server, {
+  transports: ["websocket", "polling"],
   cors: {
     origin: "*",
     methods: ["GET", "POST"],

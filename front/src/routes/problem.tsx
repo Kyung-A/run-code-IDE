@@ -20,6 +20,7 @@ const Problem = () => {
   let blocker = useBlocker(true);
 
   const socket = io(`${process.env.REACT_APP_API_ENDPOINT}/problem`, {
+    transports: ["websocket", "polling"],
     query: {
       problem: problemId,
       path: "*",
@@ -27,9 +28,9 @@ const Problem = () => {
   });
 
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const codeRef = useRef<string>();
 
   const [problem, setProblem] = useState<IProblem>();
-  const [code, setCode] = useState<string>("");
   const [lang, setLang] = useState<LanguageName>("javascript");
   const [result, setResult] = useState<IOutput[] | null>();
   const [output, setOutput] = useState<IOutput[] | null>();
@@ -40,15 +41,25 @@ const Problem = () => {
     setResult(null);
     setOutput(null);
     setError(null);
-    socket.emit("submit", { room: problemId, id: problemId, code, lang });
-  }, [code, lang, problemId, socket]);
+    socket.emit("submit", {
+      room: problemId,
+      id: problemId,
+      code: codeRef.current,
+      lang,
+    });
+  }, [lang, problemId, socket]);
 
   const onClickCodeRun = useCallback(() => {
     setResult(null);
     setOutput(null);
     setError(null);
-    socket.emit("codeRun", { room: problemId, id: problemId, code, lang });
-  }, [code, lang, problemId, socket]);
+    socket.emit("codeRun", {
+      room: problemId,
+      id: problemId,
+      code: codeRef.current,
+      lang,
+    });
+  }, [lang, problemId, socket]);
 
   useEffect(() => {
     if (problemId) {
@@ -62,16 +73,16 @@ const Problem = () => {
     setError(null);
     switch (lang) {
       case "javascript":
-        setCode(defaultCode.javscript);
+        codeRef.current = defaultCode.javscript;
         break;
       case "python":
-        setCode(defaultCode.python);
+        codeRef.current = defaultCode.python;
         break;
       case "java":
-        setCode(defaultCode.java);
+        codeRef.current = defaultCode.java;
         break;
       case "cpp":
-        setCode(defaultCode.cpp);
+        codeRef.current = defaultCode.cpp;
         break;
       default:
         break;
@@ -198,8 +209,10 @@ const Problem = () => {
           </div>
           <div className="codeMirror-wrapper">
             <CodeMirror
-              value={code}
-              onChange={(e) => setCode(e)}
+              value={codeRef.current}
+              onChange={(e) => {
+                codeRef.current = e;
+              }}
               theme={copilot}
               height="100%"
               extensions={[loadLanguage(`${lang}`)!]}
