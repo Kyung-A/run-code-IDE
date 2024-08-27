@@ -1,0 +1,23 @@
+name: main branch auto ci process script
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: excuting remote ssh commands
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.REMOTE_IP }} 
+          username: ${{ secrets.REMOTE_USER }} 
+          key: ${{ secrets.REMOTE_PRIVATE_KEY }}
+          port: ${{ secrets.REMOTE_SSH_PORT }}
+          script: | # 실행될 스크립트
+            cd /home/ec2-user/run-code-IDE
+            git pull
+            pm2 restart run-code-IDE
